@@ -1,0 +1,8 @@
+[Unit]
+Description=Prometheus PBS Exporter
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/pbs_exporter.sh
+EnvironmentFile=/etc/pbs_exporter.rc
+Type=simple

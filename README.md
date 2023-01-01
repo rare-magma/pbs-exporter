@@ -112,7 +112,7 @@ pbs_used {host="pbs.example.com", store="store3"} -1
 
 ### With the Makefile
 
-For convenience, you can install this exporter with the following command or follow the process described in the next paragraph.
+For convenience, you can uninstall this exporter with the following command or follow the process described in the next paragraph.
 
 ```
 sudo make uninstall

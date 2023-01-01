@@ -29,14 +29,14 @@ sudoedit /etc/pbs_exporter.conf
 
 ### Manually
 
-Copy `pbs_exporter.sh` to `/usr/local/bin` and make it executable.
+Copy `pbs_exporter.sh` to `/usr/local/bin/` and make it executable.
 
 Copy `pbs_exporter.conf` to `/etc/`, configure it (see the configuration section below) and make it read only.
 
-Copy the systemd unit and timer to `/etc/systemd/system`:
+Copy the systemd unit and timer to `/etc/systemd/system/`:
 
 ```
-sudo cp pbs-exporter.* /etc/systemd/system
+sudo cp pbs-exporter.* /etc/systemd/system/
 ```
 
 and run the following command to activate the timer:

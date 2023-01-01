@@ -16,13 +16,14 @@ For convenience, you can install this exporter with the following command or fol
 
 ```
 sudo make install
+sudoedit /etc/pbs_exporter.conf
 ```
 
 ### Manually
 
 Copy `pbs_exporter.sh` to `/usr/local/bin` and make it executable.
 
-Copy `pbs_exporter.rc` to `/etc/`, configure it (see the configuration section below) and make it read only.
+Copy `pbs_exporter.conf` to `/etc/`, configure it (see the configuration section below) and make it read only.
 
 Copy the systemd unit and timer to `/etc/systemd/system`:
 

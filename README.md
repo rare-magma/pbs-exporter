@@ -107,6 +107,33 @@ pbs_size {host=\"pbs.example.com\", store=\"store3\"} -1
 pbs_used {host=\"pbs.example.com\", store=\"store3\"} -1
 ```
 
+## Uninstallation
+
+### With the Makefile
+
+For convenience, you can install this exporter with the following command or follow the process described in the next paragraph.
+
+```
+sudo make uninstall
+```
+
+### Manually
+
+Run the following command to deactivate the timer:
+
+```
+sudo systemctl disable --now pbs-exporter.timer
+```
+
+Delete the following files:
+
+```
+/usr/local/bin/pbs_exporter.sh
+/etc/pbs_exporter.conf
+/etc/systemd/system/pbs-exporter.timer
+/etc/systemd/system/pbs-exporter.service
+```
+
 ## Credits
 
 This project takes inspiration from the following:

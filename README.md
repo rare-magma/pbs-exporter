@@ -4,10 +4,11 @@ Bash script that uploads proxmox backup server API info to prometheus's pushgate
 
 ## Dependencies
 
+- [bash](https://www.gnu.org/software/bash/)
 - [curl](https://curl.se/)
 - [jq](https://stedolan.github.io/jq/)
 
-## Install
+## Installation
 
 ### With the Makefile
 
@@ -46,7 +47,7 @@ sudo systemctl start pbs-exporter.service
 The config file has a few options:
 
 ```
-PBS_API_TOKEN_NAME='root@pam!prometheus'
+PBS_API_TOKEN_NAME='user@pam!prometheus'
 PBS_API_TOKEN='123e4567-e89b-12d3-a456-426614174000'
 PBS_URL='https://pbs.example.com'
 PUSHGATEWAY_URL='https://pushgateway.example.com'
@@ -61,18 +62,48 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
 
 Run the script with `bash -x` to get the output of intermediary commands.
 
+### Relevant documentation
+
+- [PBS API](https://pbs.proxmox.com/docs/api-viewer/index.html)
+- [PBS API Tokens](https://pbs.proxmox.com/docs/user-management.html#api-tokens)
+- [Prometheus Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
+
+## Exported metrics per PBS store
+
+- pbs_available: The available bytes of the underlying storage. (-1 on error)
+- pbs_size: The size of the underlying storage in bytes. (-1 on error)
+- pbs_used: The used bytes of the underlying storage. (-1 on error)
+
 ## Exported metrics example
 
 ```
 # HELP pbs_available The available bytes of the underlying storage. (-1 on error)
 # TYPE pbs_available gauge
-# HELP pbs_size The Size of the underlying storage in bytes. (-1 on error)
+# HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
 # TYPE pbs_size gauge
 # HELP pbs_used The used bytes of the underlying storage. (-1 on error)
 # TYPE pbs_used gauge
-pbs_available 567391420416
-pbs_size 691693420544
-pbs_used 124302000128
+pbs_available {host=\"pbs.example.com\", store=\"store1\"} -1
+pbs_size {host=\"pbs.example.com\", store=\"store1\"} -1
+pbs_used {host=\"pbs.example.com\", store=\"store1\"} -1
+# HELP pbs_available The available bytes of the underlying storage. (-1 on error)
+# TYPE pbs_available gauge
+# HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
+# TYPE pbs_size gauge
+# HELP pbs_used The used bytes of the underlying storage. (-1 on error)
+# TYPE pbs_used gauge
+pbs_available {host=\"pbs.example.com\", store=\"store2\"} 567317757952
+pbs_size {host=\"pbs.example.com\", store=\"store2\"} 691587252224
+pbs_used {host=\"pbs.example.com\", store=\"store2\"} 124269494272
+# HELP pbs_available The available bytes of the underlying storage. (-1 on error)
+# TYPE pbs_available gauge
+# HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
+# TYPE pbs_size gauge
+# HELP pbs_used The used bytes of the underlying storage. (-1 on error)
+# TYPE pbs_used gauge
+pbs_available {host=\"pbs.example.com\", store=\"store3\"} -1
+pbs_size {host=\"pbs.example.com\", store=\"store3\"} -1
+pbs_used {host=\"pbs.example.com\", store=\"store3\"} -1
 ```
 
 ## Credits

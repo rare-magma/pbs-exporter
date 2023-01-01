@@ -117,9 +117,9 @@ PBS_URL='https://pbs.example.com'
 PUSHGATEWAY_URL='https://pushgateway.example.com'
 ```
 
-- `PBS_API_TOKEN_NAME` should be the value in the "Token name" column in the Proxmox Backup Server user interface - Configuration - Access Control - Api Token page.
+- `PBS_API_TOKEN_NAME` should be the value in the "Token name" column in the Proxmox Backup Server user interface's `Configuration - Access Control - Api Token` page.
 - `PBS_API_TOKEN` should be the value shown when the API Token was created.
-  - This token should have at least the Datastore.Audit access role assigned to it and the path set to /datastore.
+  - This token should have at least the `Datastore.Audit` access role assigned to it and the path set to `/datastore`.
 - `PBS_URL` should be the same URL as used to access the Proxmox Backup Server user interface
 - `PUSHGATEWAY_URL` should be a valid URL for the [push gateway](https://github.com/prometheus/pushgateway).
 

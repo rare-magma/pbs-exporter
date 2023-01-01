@@ -18,6 +18,46 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 
 ## Installation
 
+<details>
+<summary>As normal user</summary>
+
+### With the Makefile
+
+For convenience, you can install this exporter with the following command or follow the process described in the next paragraph.
+
+```
+make install-user
+$EDITOR $HOME/.config/pbs_exporter.conf
+```
+
+### Manually
+
+Copy `pbs_exporter.sh` to `$HOME/.config/local/bin/` and make it executable.
+
+Copy `pbs_exporter.conf` to `$HOME/.config/`, configure it (see the configuration section below) and make it read only.
+
+Copy the systemd unit and timer to `$HOME/.config/systemd/user/`:
+
+```
+cp pbs-exporter.* $HOME/.config/systemd/user/
+```
+
+and run the following command to activate the timer:
+
+```
+systemctl --user enable --now pbs-exporter.timer
+```
+
+It's possible to trigger the execution by running manually:
+
+```
+systemctl --user start pbs-exporter.service
+```
+
+</details>
+<details>
+<summary>As root</summary>
+
 ### With the Makefile
 
 For convenience, you can install this exporter with the following command or follow the process described in the next paragraph.
@@ -51,6 +91,9 @@ It's possible to trigger the execution by running manually:
 sudo systemctl start pbs-exporter.service
 ```
 
+</details>
+<br/>
+
 ### Config file
 
 The config file has a few options:
@@ -72,10 +115,25 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
 
 Check the systemd service logs and timer info with:
 
+<details>
+<summary>As normal user</summary>
+
+```
+journalctl --user --unit pbs-exporter.service
+systemctl --user list-timers
+```
+
+</details>
+<details>
+<summary>As root</summary>
+
 ```
 journalctl --unit pbs-exporter.service
 systemctl list-timers
 ```
+
+</details>
+<br>
 
 ## Exported metrics per PBS store
 

@@ -62,8 +62,12 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
 
 ### Troubleshooting
 
-Check the systemd service logs with `journalctl -ru pbs-exporter.service`
-Check the systemd timer info with `systemctl list-timers`
+Check the systemd service logs and timer info with:
+
+```
+journalctl --unit pbs-exporter.service
+systemctl list-timers
+```
 
 ### Relevant documentation
 

@@ -17,9 +17,9 @@ done
 
 AUTH_HEADER="Authorization: PBSAPIToken=$PBS_API_TOKEN_NAME:$PBS_API_TOKEN"
 
-pbs_json=$(curl -s -q -k -H "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-usage")
+pbs_json=$(curl --silent --header "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-usage")
 
-mapfile -t parsed_stores < <(echo "$pbs_json" | jq -r '.data[].store')
+mapfile -t parsed_stores < <(echo "$pbs_json" | jq --raw-output '.data[].store')
 
 if [ ${#parsed_stores[@]} -eq 0 ]; then
     echo >&2 "Couldn't parse any store from the PBS API. Aborting."
@@ -28,7 +28,7 @@ fi
 
 for STORE in "${parsed_stores[@]}"; do
 
-    mapfile -t parsed_backup_stats < <(echo "$pbs_json" | jq -r ".data[] | select(.store==\"$STORE\") | .avail,.total,.used")
+    mapfile -t parsed_backup_stats < <(echo "$pbs_json" | jq --raw-output ".data[] | select(.store==\"$STORE\") | .avail,.total,.used")
     available_value=${parsed_backup_stats[0]}
     size_value=${parsed_backup_stats[1]}
     used_value=${parsed_backup_stats[2]}
@@ -47,6 +47,6 @@ pbs_used {host="$HOSTNAME", store="$STORE"} ${used_value}
 END_HEREDOC
     )
 
-    echo "$backup_stats" | curl --data-binary @- "${PUSHGATEWAY_URL}"/metrics/job/pbs_exporter/host/"$HOSTNAME"/store/"$STORE"
+    echo "$backup_stats" | curl --silent --data-binary @- "${PUSHGATEWAY_URL}"/metrics/job/pbs_exporter/host/"$HOSTNAME"/store/"$STORE"
 
 done

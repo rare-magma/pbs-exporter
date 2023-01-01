@@ -41,9 +41,9 @@ for STORE in "${parsed_stores[@]}"; do
 # TYPE pbs_size gauge
 # HELP pbs_used The used bytes of the underlying storage. (-1 on error)
 # TYPE pbs_used gauge
-pbs_available {host=\"$HOSTNAME\", store=\"$STORE\"} ${available_value}
-pbs_size {host=\"$HOSTNAME\", store=\"$STORE\"} ${size_value}
-pbs_used {host=\"$HOSTNAME\", store=\"$STORE\"} ${used_value}
+pbs_available {host="$HOSTNAME", store="$STORE"} ${available_value}
+pbs_size {host="$HOSTNAME", store="$STORE"} ${size_value}
+pbs_used {host="$HOSTNAME", store="$STORE"} ${used_value}
 END_HEREDOC
     )
 

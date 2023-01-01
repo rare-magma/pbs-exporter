@@ -1,6 +1,6 @@
 # pbs-exporter
 
-Bash script that uploads proxmox backup server API info to prometheus's pushgateway.
+Bash script that uploads proxmox backup server API info to prometheus' pushgateway.
 
 ## Dependencies
 

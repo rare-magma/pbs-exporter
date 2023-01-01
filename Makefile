@@ -1,6 +1,8 @@
 .PHONY: install-user
 install-user:
-	@cp pbs_exporter.sh $${HOME}/.local/bin/ \
+	@mkdir --parents $${HOME}/.local/bin \
+	&& mkdir --parents $${HOME}/.config/systemd/user \
+	&& cp pbs_exporter.sh $${HOME}/.local/bin/ \
 	&& chmod +x $${HOME}/.local/bin/pbs_exporter.sh \
 	&& cp --no-clobber pbs_exporter.conf $${HOME}/.config/pbs_exporter.conf \
 	&& chmod 400 $${HOME}/.config/pbs_exporter.conf \

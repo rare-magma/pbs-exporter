@@ -9,7 +9,7 @@ install:
 	&& systemctl enable --now pbs-exporter.timer
 
 .PHONY: uninstall
-install:
+uninstall:
 	@rm -f /usr/local/bin/pbs_exporter.sh \
 	&& rm -f /etc/pbs_exporter.conf \
 	&& systemctl disable --now pbs-exporter.timer

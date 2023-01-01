@@ -6,6 +6,7 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 
 - [curl](https://curl.se/)
 - [jq](https://stedolan.github.io/jq/)
+- Optional: [make](https://www.gnu.org/software/make/) - for automatic installation support
 
 ## Relevant documentation
 
@@ -21,7 +22,7 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 
 ### With the Makefile
 
-For convenience, you can install this exporter with the following command or follow the process described in the next paragraph.
+For convenience, you can install this exporter with the following command or follow the manual process described in the next paragraph.
 
 ```
 make install-user
@@ -72,7 +73,7 @@ systemctl --user start pbs-exporter.service
 
 ### With the Makefile
 
-For convenience, you can install this exporter with the following command or follow the process described in the next paragraph.
+For convenience, you can install this exporter with the following command or follow the manual process described in the next paragraph.
 
 ```
 sudo make install

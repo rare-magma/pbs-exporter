@@ -2,13 +2,17 @@
 
 set -Eeo pipefail
 
-dependencies=(curl jq)
+dependencies=(curl gzip jq)
 for program in "${dependencies[@]}"; do
     command -v "$program" >/dev/null 2>&1 || {
         echo >&2 "Couldn't find dependency: $program. Aborting."
         exit 1
     }
 done
+
+CURL=$(command -v curl)
+GZIP=$(command -v gzip)
+JQ=$(command -v jq)
 
 [[ -z "${PBS_API_TOKEN_NAME}" ]] && echo >&2 "PBS_API_TOKEN_NAME is empty. Aborting" && exit 1
 [[ -z "${PBS_API_TOKEN}" ]] && echo >&2 "PBS_API_TOKEN is empty. Aborting" && exit 1
@@ -17,9 +21,9 @@ done
 
 AUTH_HEADER="Authorization: PBSAPIToken=$PBS_API_TOKEN_NAME:$PBS_API_TOKEN"
 
-pbs_json=$(curl --silent --header "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-usage")
+pbs_json=$($CURL --silent --compressed --header "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-usage")
 
-mapfile -t parsed_stores < <(echo "$pbs_json" | jq --raw-output '.data[].store')
+mapfile -t parsed_stores < <(echo "$pbs_json" | $JQ --raw-output '.data[].store')
 
 if [ ${#parsed_stores[@]} -eq 0 ]; then
     echo >&2 "Couldn't parse any store from the PBS API. Aborting."
@@ -28,7 +32,7 @@ fi
 
 for STORE in "${parsed_stores[@]}"; do
 
-    mapfile -t parsed_backup_stats < <(echo "$pbs_json" | jq --raw-output ".data[] | select(.store==\"$STORE\") | .avail,.total,.used")
+    mapfile -t parsed_backup_stats < <(echo "$pbs_json" | $JQ --raw-output ".data[] | select(.store==\"$STORE\") | .avail,.total,.used")
     available_value=${parsed_backup_stats[0]}
     size_value=${parsed_backup_stats[1]}
     used_value=${parsed_backup_stats[2]}
@@ -47,6 +51,6 @@ pbs_used {host="$HOSTNAME", store="$STORE"} ${used_value}
 END_HEREDOC
     )
 
-    echo "$backup_stats" | curl --silent --data-binary @- "${PUSHGATEWAY_URL}"/metrics/job/pbs_exporter/host/"$HOSTNAME"/store/"$STORE"
+    echo "$backup_stats" | $GZIP | $CURL --silent --header 'Content-Encoding: gzip' --data-binary @- "${PUSHGATEWAY_URL}"/metrics/job/pbs_exporter/host/"$HOSTNAME"/store/"$STORE"
 
 done

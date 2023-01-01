@@ -12,6 +12,6 @@ install:
 uninstall:
 	@rm -f /usr/local/bin/pbs_exporter.sh \
 	&& rm -f /etc/pbs_exporter.conf \
-	&& systemctl disable --now pbs-exporter.timer
+	&& systemctl disable --now pbs-exporter.timer \
 	&& rm -f /etc/systemd/system/pbs-exporter.timer \
 	&& rm -f /etc/systemd/system/pbs-exporter.service

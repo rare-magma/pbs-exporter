@@ -56,12 +56,14 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
 
 - `PBS_API_TOKEN_NAME` should be the value in the "Token name" column in the Proxmox Backup Server user interface - Configuration - Access Control - Api Token page.
 - `PBS_API_TOKEN` should be the value shown when the API Token was created.
-- `PBS_URL` should be the same https URL as used to access the Proxmox Backup Server user interface
-- `PUSHGATEWAY_URL` should be a valid https URL for the [push gateway](https://github.com/prometheus/pushgateway).
+  - This token should have at least the Datastore.Audit access role assigned to it and the path set to /datastore.
+- `PBS_URL` should be the same URL as used to access the Proxmox Backup Server user interface
+- `PUSHGATEWAY_URL` should be a valid URL for the [push gateway](https://github.com/prometheus/pushgateway).
 
 ### Troubleshooting
 
-Run the script with `bash -x` to get the output of intermediary commands.
+Check the systemd service logs with `journalctl -ru pbs-exporter.service`
+Check the systemd timer info with `systemctl list-timers`
 
 ### Relevant documentation
 

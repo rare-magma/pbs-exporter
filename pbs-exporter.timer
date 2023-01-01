@@ -1,5 +1,5 @@
 [Unit]
-Description=Prometheus PBS Exporter Timer
+Description=PBS Exporter Timer
 
 [Timer]
 OnCalendar=*-*-* 08:00:00

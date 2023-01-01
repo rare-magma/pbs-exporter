@@ -1,5 +1,5 @@
 [Unit]
-Description=Prometheus PBS Exporter
+Description=PBS Exporter
 After=network-online.target
 
 [Service]

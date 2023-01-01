@@ -1,6 +1,6 @@
-# prometheus-pbs-exporter
+# pbs-exporter
 
-Bash script that uploads proxmox backup server info to prometheus's pushgateway.
+Bash script that uploads proxmox backup server API info to prometheus's pushgateway.
 
 ## Dependencies
 
@@ -26,19 +26,19 @@ Copy `pbs_exporter.rc` to `/etc/`, configure it (see the configuration section b
 Copy the systemd unit and timer to `/etc/systemd/system`:
 
 ```
-sudo cp prometheus-pbs-exporter.* /etc/systemd/system
+sudo cp pbs-exporter.* /etc/systemd/system
 ```
 
 and run the following command to activate the timer:
 
 ```
-sudo systemctl enable --now prometheus-pbs-exporter.timer
+sudo systemctl enable --now pbs-exporter.timer
 ```
 
 It's possible to trigger the execution by running manually:
 
 ```
-sudo systemctl start prometheus-pbs-exporter.service
+sudo systemctl start pbs-exporter.service
 ```
 
 ### Config file
@@ -79,5 +79,5 @@ pbs_used 124302000128
 
 This project takes inspiration from the following:
 
-- [mad-ady/prometheus-borg-exporter](https://github.com/mad-ady/prometheus-borg-exporter)
-- [OVYA/prometheus-borg-exporter](https://github.com/OVYA/prometheus-borg-exporter)
+- [mad-ady/borg-exporter](https://github.com/mad-ady/borg-exporter)
+- [OVYA/borg-exporter](https://github.com/OVYA/borg-exporter)

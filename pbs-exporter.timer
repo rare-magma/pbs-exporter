@@ -2,7 +2,7 @@
 Description=PBS Exporter Timer
 
 [Timer]
-OnCalendar=*-*-* 08:00:00
+OnCalendar=*-*-* 10:00:00
 
 [Install]
 WantedBy=timers.target

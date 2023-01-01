@@ -1,16 +1,17 @@
 .PHONY: install-user
-install:
+install-user:
 	@cp pbs_exporter.sh $${HOME}/.local/bin/ \
 	&& chmod +x $${HOME}/.local/bin/pbs_exporter.sh \
 	&& cp --no-clobber pbs_exporter.conf $${HOME}/.config/pbs_exporter.conf \
 	&& chmod 400 $${HOME}/.config/pbs_exporter.conf \
 	&& sed -i "s#ExecStart=/usr/local/bin/pbs_exporter.sh#ExecStart=$${HOME}/.local/bin/pbs_exporter.sh#" pbs-exporter.service \
+	&& sed -i "s#EnvironmentFile=/etc/pbs_exporter.conf#EnvironmentFile=$${HOME}/.config/pbs_exporter.conf#" pbs-exporter.service \
 	&& cp pbs-exporter.timer $${HOME}/.config/systemd/user/ \
 	&& cp pbs-exporter.service $${HOME}/.config/systemd/user/ \
 	&& systemctl --user enable --now pbs-exporter.timer
 
 .PHONY: uninstall-user
-uninstall:
+uninstall-user:
 	@rm -f $${HOME}/.local/bin/pbs_exporter.sh \
 	&& rm -f $${HOME}/.config/pbs_exporter.conf \
 	&& systemctl --user disable --now pbs-exporter.timer \

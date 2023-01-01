@@ -85,27 +85,27 @@ Run the script with `bash -x` to get the output of intermediary commands.
 # TYPE pbs_size gauge
 # HELP pbs_used The used bytes of the underlying storage. (-1 on error)
 # TYPE pbs_used gauge
-pbs_available {host=\"pbs.example.com\", store=\"store1\"} -1
-pbs_size {host=\"pbs.example.com\", store=\"store1\"} -1
-pbs_used {host=\"pbs.example.com\", store=\"store1\"} -1
+pbs_available {host="pbs.example.com", store="store1"} -1
+pbs_size {host="pbs.example.com", store="store1"} -1
+pbs_used {host="pbs.example.com", store="store1"} -1
 # HELP pbs_available The available bytes of the underlying storage. (-1 on error)
 # TYPE pbs_available gauge
 # HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
 # TYPE pbs_size gauge
 # HELP pbs_used The used bytes of the underlying storage. (-1 on error)
 # TYPE pbs_used gauge
-pbs_available {host=\"pbs.example.com\", store=\"store2\"} 567317757952
-pbs_size {host=\"pbs.example.com\", store=\"store2\"} 691587252224
-pbs_used {host=\"pbs.example.com\", store=\"store2\"} 124269494272
+pbs_available {host="pbs.example.com", store="store2"} 567317757952
+pbs_size {host="pbs.example.com", store="store2"} 691587252224
+pbs_used {host="pbs.example.com", store="store2"} 124269494272
 # HELP pbs_available The available bytes of the underlying storage. (-1 on error)
 # TYPE pbs_available gauge
 # HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
 # TYPE pbs_size gauge
 # HELP pbs_used The used bytes of the underlying storage. (-1 on error)
 # TYPE pbs_used gauge
-pbs_available {host=\"pbs.example.com\", store=\"store3\"} -1
-pbs_size {host=\"pbs.example.com\", store=\"store3\"} -1
-pbs_used {host=\"pbs.example.com\", store=\"store3\"} -1
+pbs_available {host="pbs.example.com", store="store3"} -1
+pbs_size {host="pbs.example.com", store="store3"} -1
+pbs_used {host="pbs.example.com", store="store3"} -1
 ```
 
 ## Uninstallation

@@ -22,6 +22,7 @@ pbs_json=$(curl -s -q -k -H "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-
 mapfile -t parsed_stores < <(echo "$pbs_json" | jq -r '.data[].store')
 
 if [ ${#parsed_stores[@]} -eq 0 ]; then
+    echo >&2 "Couldn't parse any store from the PBS API. Aborting."
     exit 1
 fi
 

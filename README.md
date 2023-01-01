@@ -9,8 +9,8 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 
 ## Relevant documentation
 
-- [PBS API](https://pbs.proxmox.com/docs/api-viewer/index.html)
-- [PBS API Tokens](https://pbs.proxmox.com/docs/user-management.html#api-tokens)
+- [Proxmox Backup Server API](https://pbs.proxmox.com/docs/api-viewer/index.html)
+- [Proxmox Backup Server API Tokens](https://pbs.proxmox.com/docs/user-management.html#api-tokens)
 - [Prometheus Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
 - [Systemd Timers](https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
 

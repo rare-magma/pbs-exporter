@@ -68,6 +68,7 @@ Run the script with `bash -x` to get the output of intermediary commands.
 - [PBS API](https://pbs.proxmox.com/docs/api-viewer/index.html)
 - [PBS API Tokens](https://pbs.proxmox.com/docs/user-management.html#api-tokens)
 - [Prometheus Pushgateway](https://github.com/prometheus/pushgateway/blob/master/README.md)
+- [Systemd Timers](https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
 
 ## Exported metrics per PBS store
 

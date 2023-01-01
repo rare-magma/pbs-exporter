@@ -4,10 +4,8 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 
 ## Dependencies
 
-- [bash](https://www.gnu.org/software/bash/)
 - [curl](https://curl.se/)
 - [jq](https://stedolan.github.io/jq/)
-- [systemd](https://systemd.io/)
 
 ## Relevant documentation
 
@@ -32,7 +30,7 @@ $EDITOR $HOME/.config/pbs_exporter.conf
 
 ### Manually
 
-Copy `pbs_exporter.sh` to `$HOME/.config/local/bin/` and make it executable.
+Copy `pbs_exporter.sh` to `$HOME/.local/bin/` and make it executable.
 
 Copy `pbs_exporter.conf` to `$HOME/.config/`, configure it (see the configuration section below) and make it read only.
 

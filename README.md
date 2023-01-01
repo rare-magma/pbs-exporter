@@ -7,6 +7,7 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 - [bash](https://www.gnu.org/software/bash/)
 - [curl](https://curl.se/)
 - [jq](https://stedolan.github.io/jq/)
+- [systemd](https://systemd.io/)
 
 ## Relevant documentation
 

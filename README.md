@@ -179,6 +179,38 @@ pbs_used {host="pbs.example.com", store="store2"} 124269494272
 
 ## Uninstallation
 
+<details>
+<summary>As normal user</summary>
+
+### With the Makefile
+
+For convenience, you can uninstall this exporter with the following command or follow the process described in the next paragraph.
+
+```
+make uninstall-user
+```
+
+### Manually
+
+Run the following command to deactivate the timer:
+
+```
+systemctl --user disable --now pbs-exporter.timer
+```
+
+Delete the following files:
+
+```
+$HOME/.local/bin/pbs_exporter.sh
+$HOME/.config/pbs_exporter.conf
+$HOME/.config/systemd/user/pbs-exporter.timer
+$HOME/.config/systemd/user/pbs-exporter.service
+```
+
+</details>
+<details>
+<summary>As root</summary>
+
 ### With the Makefile
 
 For convenience, you can uninstall this exporter with the following command or follow the process described in the next paragraph.
@@ -203,6 +235,9 @@ Delete the following files:
 /etc/systemd/system/pbs-exporter.timer
 /etc/systemd/system/pbs-exporter.service
 ```
+
+</details>
+<br>
 
 ## Credits
 

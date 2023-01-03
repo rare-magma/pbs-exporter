@@ -132,7 +132,7 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
 Run the script manually with bash set to trace:
 
 ```
-bash -x $HOME/.local/bin/qbit_exporter.sh
+bash -x $HOME/.local/bin/pbs_exporter.sh
 ```
 
 Check the systemd service logs and timer info with:
@@ -149,7 +149,7 @@ systemctl --user list-timers
 Run the script manually with bash set to trace:
 
 ```
-sudo bash -x /usr/local/bin/qbit_exporter.sh
+sudo bash -x /usr/local/bin/pbs_exporter.sh
 ```
 
 Check the systemd service logs and timer info with:
@@ -257,5 +257,5 @@ Delete the following files:
 
 This project takes inspiration from the following:
 
-- [mad-ady/borg-exporter](https://github.com/mad-ady/prometheus-borg-exporter)
-- [OVYA/borg-exporter](https://github.com/OVYA/prometheus-borg-exporter)
+- [mad-ady/prometheus-borg-exporter](https://github.com/mad-ady/prometheus-borg-exporter)
+- [OVYA/prometheus-borg-exporter](https://github.com/OVYA/prometheus-borg-exporter)

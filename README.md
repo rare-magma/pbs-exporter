@@ -126,10 +126,16 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
 
 ### Troubleshooting
 
-Check the systemd service logs and timer info with:
-
 <details>
 <summary>As normal user</summary>
+
+Run the script manually with bash set to trace:
+
+```
+bash -x $HOME/.local/bin/qbit_exporter.sh
+```
+
+Check the systemd service logs and timer info with:
 
 ```
 journalctl --user --unit pbs-exporter.service
@@ -139,6 +145,14 @@ systemctl --user list-timers
 </details>
 <details>
 <summary>As root</summary>
+
+Run the script manually with bash set to trace:
+
+```
+sudo bash -x /usr/local/bin/qbit_exporter.sh
+```
+
+Check the systemd service logs and timer info with:
 
 ```
 journalctl --unit pbs-exporter.service
@@ -243,5 +257,5 @@ Delete the following files:
 
 This project takes inspiration from the following:
 
-- [mad-ady/borg-exporter](https://github.com/mad-ady/borg-exporter)
-- [OVYA/borg-exporter](https://github.com/OVYA/borg-exporter)
+- [mad-ady/borg-exporter](https://github.com/mad-ady/prometheus-borg-exporter)
+- [OVYA/borg-exporter](https://github.com/OVYA/prometheus-borg-exporter)

@@ -162,33 +162,27 @@ systemctl list-timers
 </details>
 <br>
 
-## Exported metrics per PBS store
+## Exported metrics per PBS store (which is not in maintenance mode)
 
-- pbs_available: The available bytes of the underlying storage. (-1 on error)
-- pbs_size: The size of the underlying storage in bytes. (-1 on error)
-- pbs_used: The used bytes of the underlying storage. (-1 on error)
+- pbs_available: The available bytes of the underlying storage.
+- pbs_size: The size of the underlying storage in bytes.
+- pbs_used: The used bytes of the underlying storage.
 
 ## Exported metrics example
 
 ```
-# HELP pbs_available The available bytes of the underlying storage. (-1 on error)
+# HELP pbs_available The available bytes of the underlying storage.
 # TYPE pbs_available gauge
-# HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
+# HELP pbs_size The size of the underlying storage in bytes.
 # TYPE pbs_size gauge
-# HELP pbs_used The used bytes of the underlying storage. (-1 on error)
+# HELP pbs_used The used bytes of the underlying storage.
 # TYPE pbs_used gauge
-pbs_available {host="pbs.example.com", store="store1"} -1
-pbs_size {host="pbs.example.com", store="store1"} -1
-pbs_used {host="pbs.example.com", store="store1"} -1
-# HELP pbs_available The available bytes of the underlying storage. (-1 on error)
-# TYPE pbs_available gauge
-# HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
-# TYPE pbs_size gauge
-# HELP pbs_used The used bytes of the underlying storage. (-1 on error)
-# TYPE pbs_used gauge
+# HELP pbs_snapshot_count The total number of backups.
+# TYPE pbs_snapshot_count gauge
 pbs_available {host="pbs.example.com", store="store2"} 567317757952
 pbs_size {host="pbs.example.com", store="store2"} 691587252224
 pbs_used {host="pbs.example.com", store="store2"} 124269494272
+pbs_snapshot_count {host="pbs.example.com", store="store2"} 295
 ```
 
 ## Uninstallation

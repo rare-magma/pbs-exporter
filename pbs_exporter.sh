@@ -23,7 +23,7 @@ AUTH_HEADER="Authorization: PBSAPIToken=$PBS_API_TOKEN_NAME:$PBS_API_TOKEN"
 
 pbs_json=$($CURL --silent --compressed --header "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-usage")
 
-mapfile -t parsed_stores < <(echo "$pbs_json" | $JQ --raw-output '.data[].store')
+mapfile -t parsed_stores < <(echo "$pbs_json" | $JQ --raw-output '.data[] | select(.avail !=-1) | .store')
 
 if [ ${#parsed_stores[@]} -eq 0 ]; then
     echo >&2 "Couldn't parse any store from the PBS API. Aborting."
@@ -33,21 +33,30 @@ fi
 for STORE in "${parsed_stores[@]}"; do
 
     mapfile -t parsed_backup_stats < <(echo "$pbs_json" | $JQ --raw-output ".data[] | select(.store==\"$STORE\") | .avail,.total,.used")
+
     available_value=${parsed_backup_stats[0]}
     size_value=${parsed_backup_stats[1]}
     used_value=${parsed_backup_stats[2]}
 
+    store_status_json=$($CURL --silent --compressed --header "$AUTH_HEADER" "$PBS_URL/api2/json/admin/datastore/${STORE}/snapshots")
+
+    [[ -z "${store_status_json}" ]] && echo >&2 "Couldn't parse any snapshot status from the PBS API for store=${STORE}. Aborting." && exit 1
+    snapshot_count_value=$(echo "$store_status_json" | $JQ '.data | length')
+
     backup_stats=$(
         cat <<END_HEREDOC
-# HELP pbs_available The available bytes of the underlying storage. (-1 on error)
+# HELP pbs_available The available bytes of the underlying storage.
 # TYPE pbs_available gauge
-# HELP pbs_size The size of the underlying storage in bytes. (-1 on error)
+# HELP pbs_size The size of the underlying storage in bytes.
 # TYPE pbs_size gauge
-# HELP pbs_used The used bytes of the underlying storage. (-1 on error)
+# HELP pbs_used The used bytes of the underlying storage.
 # TYPE pbs_used gauge
+# HELP pbs_snapshot_count The total number of backups.
+# TYPE pbs_snapshot_count gauge
 pbs_available {host="$HOSTNAME", store="$STORE"} ${available_value}
 pbs_size {host="$HOSTNAME", store="$STORE"} ${size_value}
 pbs_used {host="$HOSTNAME", store="$STORE"} ${used_value}
+pbs_snapshot_count {host="$HOSTNAME", store="$STORE"} ${snapshot_count_value}
 END_HEREDOC
     )
 

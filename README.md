@@ -168,7 +168,7 @@ systemctl list-timers
 - pbs_size: The size of the underlying storage in bytes.
 - pbs_used: The used bytes of the underlying storage.
 - pbs_snapshot_count: The total number of backups.
-- pbs_snapshot_count: The total number of backups per VM.
+- pbs_snapshot_vm_count: The total number of backups per VM.
 
 ## Exported metrics example
 
@@ -181,7 +181,7 @@ systemctl list-timers
 # TYPE pbs_used gauge
 # HELP pbs_snapshot_count The total number of backups.
 # TYPE pbs_snapshot_count gauge
-# HELP pbs_snapshot_count The total number of backups per VM.
+# HELP pbs_snapshot_vm_count The total number of backups per VM.
 # TYPE pbs_snapshot_vm_count gauge
 pbs_available {host="pbs.example.com", store="store2"} 567317757952
 pbs_size {host="pbs.example.com", store="store2"} 691587252224

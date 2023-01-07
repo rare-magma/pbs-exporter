@@ -66,7 +66,7 @@ for STORE in "${parsed_stores[@]}"; do
 # TYPE pbs_used gauge
 # HELP pbs_snapshot_count The total number of backups.
 # TYPE pbs_snapshot_count gauge
-# HELP pbs_snapshot_count The total number of backups per VM.
+# HELP pbs_snapshot_vm_count The total number of backups per VM.
 # TYPE pbs_snapshot_vm_count gauge
 pbs_available {host="$HOSTNAME", store="$STORE"} ${available_value}
 pbs_size {host="$HOSTNAME", store="$STORE"} ${size_value}

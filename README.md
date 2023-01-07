@@ -162,7 +162,9 @@ systemctl list-timers
 </details>
 <br>
 
-## Exported metrics per PBS store (which is not in maintenance mode)
+## Exported metrics per PBS store
+
+The following metrics are available for all stores currently not in maintenance mode:
 
 - pbs_available: The available bytes of the underlying storage.
 - pbs_size: The size of the underlying storage in bytes.

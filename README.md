@@ -187,9 +187,9 @@ pbs_available {host="pbs.example.com", store="store2"} 567317757952
 pbs_size {host="pbs.example.com", store="store2"} 691587252224
 pbs_used {host="pbs.example.com", store="store2"} 124269494272
 pbs_snapshot_count {host="pbs.example.com", store="store2"} 295
-pbs_snapshot_vm_count {host=pbs.example.com, store=pbs, vm_id="101"} 11
-pbs_snapshot_vm_count {host=pbs.example.com, store=pbs, vm_id="102"} 12
-pbs_snapshot_vm_count {host=pbs.example.com, store=pbs, vm_id="103"} 10
+pbs_snapshot_vm_count {host="pbs.example.com", store="store2", vm_id="101"} 11
+pbs_snapshot_vm_count {host="pbs.example.com", store="store2", vm_id="102"} 12
+pbs_snapshot_vm_count {host="pbs.example.com", store="store2", vm_id="103"} 10
 ```
 
 ## Uninstallation

@@ -43,6 +43,19 @@ for STORE in "${parsed_stores[@]}"; do
     [[ -z "${store_status_json}" ]] && echo >&2 "Couldn't parse any snapshot status from the PBS API for store=${STORE}. Aborting." && exit 1
     snapshot_count_value=$(echo "$store_status_json" | $JQ '.data | length')
 
+    mapfile -t unique_vm_ids < <(echo "$store_status_json" | $JQ '.data | unique_by(."backup-id") | .[]."backup-id"')
+
+    if [ ${#unique_vm_ids[@]} -eq 0 ]; then
+        echo >&2 "Couldn't parse any VM IDs from the PBS API. Aborting."
+        exit 1
+    fi
+
+    for VM_ID in "${unique_vm_ids[@]}"; do
+        snapshot_count_vm_value=$(echo "$store_status_json" | $JQ "reduce (.data[] | select(.\"backup-id\" == $VM_ID) | .\"backup-id\") as \$i (0;.+=1)")
+        pbs_snapshot_vm_count_list+=$(printf "pbs_snapshot_vm_count {host=%s, store=%s, vm_id=%s} %s" "$HOSTNAME" "$STORE" "$VM_ID" "$snapshot_count_vm_value")
+        pbs_snapshot_vm_count_list+=$'\n'
+    done
+
     backup_stats=$(
         cat <<END_HEREDOC
 # HELP pbs_available The available bytes of the underlying storage.
@@ -53,13 +66,20 @@ for STORE in "${parsed_stores[@]}"; do
 # TYPE pbs_used gauge
 # HELP pbs_snapshot_count The total number of backups.
 # TYPE pbs_snapshot_count gauge
+# HELP pbs_snapshot_count The total number of backups per VM.
+# TYPE pbs_snapshot_vm_count gauge
 pbs_available {host="$HOSTNAME", store="$STORE"} ${available_value}
 pbs_size {host="$HOSTNAME", store="$STORE"} ${size_value}
 pbs_used {host="$HOSTNAME", store="$STORE"} ${used_value}
 pbs_snapshot_count {host="$HOSTNAME", store="$STORE"} ${snapshot_count_value}
+${pbs_snapshot_vm_count_list}
 END_HEREDOC
     )
 
-    echo "$backup_stats" | $GZIP | $CURL --silent --header 'Content-Encoding: gzip' --data-binary @- "${PUSHGATEWAY_URL}"/metrics/job/pbs_exporter/host/"$HOSTNAME"/store/"$STORE"
+    echo "$backup_stats" | $GZIP |
+        $CURL --silent \
+            --header 'Content-Encoding: gzip' \
+            --data-binary @- \
+            "${PUSHGATEWAY_URL}"/metrics/job/pbs_exporter/host/"$HOSTNAME"/store/"$STORE"
 
 done

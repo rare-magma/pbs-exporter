@@ -167,6 +167,8 @@ systemctl list-timers
 - pbs_available: The available bytes of the underlying storage.
 - pbs_size: The size of the underlying storage in bytes.
 - pbs_used: The used bytes of the underlying storage.
+- pbs_snapshot_count: The total number of backups.
+- pbs_snapshot_count: The total number of backups per VM.
 
 ## Exported metrics example
 
@@ -179,10 +181,15 @@ systemctl list-timers
 # TYPE pbs_used gauge
 # HELP pbs_snapshot_count The total number of backups.
 # TYPE pbs_snapshot_count gauge
+# HELP pbs_snapshot_count The total number of backups per VM.
+# TYPE pbs_snapshot_vm_count gauge
 pbs_available {host="pbs.example.com", store="store2"} 567317757952
 pbs_size {host="pbs.example.com", store="store2"} 691587252224
 pbs_used {host="pbs.example.com", store="store2"} 124269494272
 pbs_snapshot_count {host="pbs.example.com", store="store2"} 295
+pbs_snapshot_vm_count {host=pbs.example.com, store=pbs, vm_id="101"} 11
+pbs_snapshot_vm_count {host=pbs.example.com, store=pbs, vm_id="102"} 12
+pbs_snapshot_vm_count {host=pbs.example.com, store=pbs, vm_id="103"} 10
 ```
 
 ## Uninstallation

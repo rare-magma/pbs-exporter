@@ -50,6 +50,7 @@ for STORE in "${parsed_stores[@]}"; do
         exit 1
     fi
 
+    unset pbs_snapshot_vm_count_list
     for VM_ID in "${unique_vm_ids[@]}"; do
         snapshot_count_vm_value=$(echo "$store_status_json" | $JQ "reduce (.data[] | select(.\"backup-id\" == $VM_ID) | .\"backup-id\") as \$i (0;.+=1)")
         pbs_snapshot_vm_count_list+=$(printf "pbs_snapshot_vm_count {host=\"%s\", store=\"%s\", vm_id=%s} %s" "$HOSTNAME" "$STORE" "$VM_ID" "$snapshot_count_vm_value")

@@ -7,7 +7,7 @@ install-user:
 	&& cp --no-clobber pbs_exporter.conf $${HOME}/.config/pbs_exporter.conf \
 	&& chmod 400 $${HOME}/.config/pbs_exporter.conf \
 	&& sed -i "s#ExecStart=/usr/local/bin/pbs_exporter.sh#ExecStart=$${HOME}/.local/bin/pbs_exporter.sh#" pbs-exporter.service \
-	&& sed -i "s#EnvironmentFile=/etc/pbs_exporter.conf#EnvironmentFile=$${HOME}/.config/pbs_exporter.conf#" pbs-exporter.service \
+	&& sed -i "s#LoadCredential=creds:/etc/pbs_exporter.conf#LoadCredential=creds:$${HOME}/.config/pbs_exporter.conf#" pbs-exporter.service \
 	&& cp pbs-exporter.timer $${HOME}/.config/systemd/user/ \
 	&& cp pbs-exporter.service $${HOME}/.config/systemd/user/ \
 	&& systemctl --user enable --now pbs-exporter.timer

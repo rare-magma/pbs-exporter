@@ -14,6 +14,9 @@ CURL=$(command -v curl)
 GZIP=$(command -v gzip)
 JQ=$(command -v jq)
 
+# shellcheck source=/dev/null
+source "$CREDENTIALS_DIRECTORY/creds"
+
 [[ -z "${PBS_API_TOKEN_NAME}" ]] && echo >&2 "PBS_API_TOKEN_NAME is empty. Aborting" && exit 1
 [[ -z "${PBS_API_TOKEN}" ]] && echo >&2 "PBS_API_TOKEN is empty. Aborting" && exit 1
 [[ -z "${PBS_URL}" ]] && echo >&2 "PBS_URL is empty. Aborting" && exit 1

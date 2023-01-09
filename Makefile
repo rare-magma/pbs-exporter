@@ -6,10 +6,12 @@ install-user:
 	&& chmod +x $${HOME}/.local/bin/pbs_exporter.sh \
 	&& cp --no-clobber pbs_exporter.conf $${HOME}/.config/pbs_exporter.conf \
 	&& chmod 400 $${HOME}/.config/pbs_exporter.conf \
-	&& sed -i "s#ExecStart=/usr/local/bin/pbs_exporter.sh#ExecStart=$${HOME}/.local/bin/pbs_exporter.sh#" pbs-exporter.service \
-	&& sed -i "s#LoadCredential=creds:/etc/pbs_exporter.conf#LoadCredential=creds:$${HOME}/.config/pbs_exporter.conf#" pbs-exporter.service \
 	&& cp pbs-exporter.timer $${HOME}/.config/systemd/user/ \
 	&& cp pbs-exporter.service $${HOME}/.config/systemd/user/ \
+	&& sed -i "s#ExecStart=/usr/local/bin/pbs_exporter.sh#ExecStart=$${HOME}/.local/bin/pbs_exporter.sh#" \
+		$${HOME}/.config/systemd/user/pbs-exporter.service \
+	&& sed -i "s#LoadCredential=creds:/etc/pbs_exporter.conf#LoadCredential=creds:$${HOME}/.config/pbs_exporter.conf#" \
+		$${HOME}/.config/systemd/user/pbs-exporter.service \
 	&& systemctl --user enable --now pbs-exporter.timer
 
 .PHONY: uninstall-user

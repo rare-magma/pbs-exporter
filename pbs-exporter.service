@@ -5,4 +5,4 @@ After=network-online.target
 [Service]
 ExecStart=/usr/local/bin/pbs_exporter.sh
 EnvironmentFile=/etc/pbs_exporter.conf
-Type=simple
+Type=oneshot

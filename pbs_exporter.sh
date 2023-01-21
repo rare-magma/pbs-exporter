@@ -35,18 +35,33 @@ fi
 
 for STORE in "${parsed_stores[@]}"; do
 
-    mapfile -t parsed_backup_stats < <(echo "$pbs_json" | $JQ --raw-output ".data[] | select(.store==\"$STORE\") | .avail,.total,.used")
+    mapfile -t parsed_backup_stats < <(
+        echo "$pbs_json" |
+            $JQ --raw-output ".data[] | select(.store==\"$STORE\") | .avail,.total,.used"
+    )
 
     available_value=${parsed_backup_stats[0]}
     size_value=${parsed_backup_stats[1]}
     used_value=${parsed_backup_stats[2]}
 
-    store_status_json=$($CURL --silent --compressed --header "$AUTH_HEADER" "$PBS_URL/api2/json/admin/datastore/${STORE}/snapshots")
+    store_status_json=$(
+        $CURL --silent \
+            --compressed \
+            --header "$AUTH_HEADER" \
+            "$PBS_URL/api2/json/admin/datastore/${STORE}/snapshots"
+    )
 
-    [[ -z "${store_status_json}" ]] && echo >&2 "Couldn't parse any snapshot status from the PBS API for store=${STORE}. Aborting." && exit 1
+    if [[ -z "${store_status_json}" ]]; then
+        echo >&2 "Couldn't parse any snapshot status from the PBS API for store=${STORE}. Aborting."
+        exit 1
+    fi
+
     snapshot_count_value=$(echo "$store_status_json" | $JQ '.data | length')
 
-    mapfile -t unique_vm_ids < <(echo "$store_status_json" | $JQ '.data | unique_by(."backup-id") | .[]."backup-id"')
+    mapfile -t unique_vm_ids < <(
+        echo "$store_status_json" |
+            $JQ '.data | unique_by(."backup-id") | .[]."backup-id"'
+    )
 
     if [ ${#unique_vm_ids[@]} -eq 0 ]; then
         echo >&2 "Couldn't parse any VM IDs from the PBS API. Aborting."
@@ -54,9 +69,19 @@ for STORE in "${parsed_stores[@]}"; do
     fi
 
     unset pbs_snapshot_vm_count_list
+
     for VM_ID in "${unique_vm_ids[@]}"; do
-        snapshot_count_vm_value=$(echo "$store_status_json" | $JQ "reduce (.data[] | select(.\"backup-id\" == $VM_ID) | .\"backup-id\") as \$i (0;.+=1)")
-        pbs_snapshot_vm_count_list+=$(printf "pbs_snapshot_vm_count {host=\"%s\", store=\"%s\", vm_id=%s} %s" "$HOSTNAME" "$STORE" "$VM_ID" "$snapshot_count_vm_value")
+
+        snapshot_count_vm_value=$(
+            echo "$store_status_json" |
+                $JQ "reduce (.data[] | select(.\"backup-id\" == $VM_ID) | .\"backup-id\") as \$i (0;.+=1)"
+        )
+
+        pbs_snapshot_vm_count_list+=$(
+            printf "pbs_snapshot_vm_count {host=\"%s\", store=\"%s\", vm_id=%s} %s" \
+                "$HOSTNAME" "$STORE" "$VM_ID" "$snapshot_count_vm_value"
+        )
+
         pbs_snapshot_vm_count_list+=$'\n'
     done
 

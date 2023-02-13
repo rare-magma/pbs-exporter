@@ -24,7 +24,7 @@ source "$CREDENTIALS_DIRECTORY/creds"
 
 AUTH_HEADER="Authorization: PBSAPIToken=$PBS_API_TOKEN_NAME:$PBS_API_TOKEN"
 
-pbs_json=$($CURL --silent --compressed --header "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-usage")
+pbs_json=$($CURL --silent --fail --show-error --compressed --header "$AUTH_HEADER" "$PBS_URL/api2/json/status/datastore-usage")
 
 mapfile -t parsed_stores < <(echo "$pbs_json" | $JQ --raw-output '.data[] | select(.avail !=-1) | .store')
 
@@ -45,7 +45,7 @@ for STORE in "${parsed_stores[@]}"; do
     used_value=${parsed_backup_stats[2]}
 
     store_status_json=$(
-        $CURL --silent \
+        $CURL --silent --fail --show-error \
             --compressed \
             --header "$AUTH_HEADER" \
             "$PBS_URL/api2/json/admin/datastore/${STORE}/snapshots"
@@ -106,7 +106,7 @@ END_HEREDOC
     )
 
     echo "$backup_stats" | $GZIP |
-        $CURL --silent \
+        $CURL --silent --fail --show-error \
             --header 'Content-Encoding: gzip' \
             --data-binary @- \
             "${PUSHGATEWAY_URL}"/metrics/job/pbs_exporter/host/"$HOSTNAME"/store/"$STORE"

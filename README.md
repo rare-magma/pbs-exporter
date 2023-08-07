@@ -116,6 +116,7 @@ PBS_API_TOKEN_NAME='user@pam!prometheus'
 PBS_API_TOKEN='123e4567-e89b-12d3-a456-426614174000'
 PBS_URL='https://pbs.example.com'
 PUSHGATEWAY_URL='https://pushgateway.example.com'
+PBS_TASK_PERIOD_DAYS=24
 ```
 
 - `PBS_API_TOKEN_NAME` should be the value in the "Token name" column in the Proxmox Backup Server user interface's `Configuration - Access Control - Api Token` page.
@@ -123,6 +124,7 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
   - This token should have at least the `Datastore.Audit` access role assigned to it and the path set to `/datastore`.
 - `PBS_URL` should be the same URL as used to access the Proxmox Backup Server user interface
 - `PUSHGATEWAY_URL` should be a valid URL for the [push gateway](https://github.com/prometheus/pushgateway).
+- `PBS_TASK_PERIOD_DAYS` can be used to overwrite default of 24 hours for the tasks reporting period.
 
 ### Troubleshooting
 
@@ -170,7 +172,10 @@ The following metrics are available for all stores currently not in maintenance 
 - pbs_size: The size of the underlying storage in bytes.
 - pbs_used: The used bytes of the underlying storage.
 - pbs_snapshot_count: The total number of backups.
+- pbs_estimated_full_date: The UNIX timestamp for the estimated full date. It can be 100+ years in the future.
 - pbs_snapshot_vm_count: The total number of backups per VM.
+- pbs_task_status_counts: The total number of tasks per status, per store in the specified reporting period.
+
 
 ## Exported metrics example
 
@@ -189,9 +194,12 @@ pbs_available {host="pbs.example.com", store="store2"} 567317757952
 pbs_size {host="pbs.example.com", store="store2"} 691587252224
 pbs_used {host="pbs.example.com", store="store2"} 124269494272
 pbs_snapshot_count {host="pbs.example.com", store="store2"} 295
+pbs_estimated_full_date {host="pbs.example.com", store="store2"} 10432653040
 pbs_snapshot_vm_count {host="pbs.example.com", store="store2", vm_id="101"} 11
 pbs_snapshot_vm_count {host="pbs.example.com", store="store2", vm_id="102"} 12
 pbs_snapshot_vm_count {host="pbs.example.com", store="store2", vm_id="103"} 10
+pbs_task_status_counts {host="pbs.example.com", store="store2", status="OK"} 10
+pbs_task_status_counts {host="pbs.example.com", store="store2", status="ERROR"} 2
 ```
 
 ## Uninstallation

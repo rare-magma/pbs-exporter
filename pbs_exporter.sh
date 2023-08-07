@@ -14,9 +14,6 @@ CURL=$(command -v curl)
 GZIP=$(command -v gzip)
 JQ=$(command -v jq)
 
-current_timestamp=$(date +%s)
-twenty_four_hours_ago=$((current_timestamp - 86400))
-
 # shellcheck source=/dev/null
 source "$CREDENTIALS_DIRECTORY/creds"
 
@@ -24,6 +21,10 @@ source "$CREDENTIALS_DIRECTORY/creds"
 [[ -z "${PBS_API_TOKEN}" ]] && echo >&2 "PBS_API_TOKEN is empty. Aborting" && exit 1
 [[ -z "${PBS_URL}" ]] && echo >&2 "PBS_URL is empty. Aborting" && exit 1
 [[ -z "${PUSHGATEWAY_URL}" ]] && echo >&2 "PUSHGATEWAY_URL is empty. Aborting" && exit 1
+
+[[ -z "${PBS_TASK_PERIOD_DAYS}" ]] && PBS_TASK_PERIOD_DAYS=24
+
+twenty_four_hours_ago=$(date +%s --date "${PBS_TASK_PERIOD_DAYS} hours ago")
 
 AUTH_HEADER="Authorization: PBSAPIToken=$PBS_API_TOKEN_NAME:$PBS_API_TOKEN"
 PBS_CURL_OPTIONS=($PBS_CURL_OPTIONS --silent --fail --show-error --compressed --header "$AUTH_HEADER")

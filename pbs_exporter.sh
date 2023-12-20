@@ -14,8 +14,12 @@ CURL=$(command -v curl)
 GZIP=$(command -v gzip)
 JQ=$(command -v jq)
 
-# shellcheck source=/dev/null
-source "$CREDENTIALS_DIRECTORY/creds"
+if [[ "${RUNNING_IN_DOCKER}" ]]; then
+    source "/app/pbs_exporter.conf"
+else
+    # shellcheck source=/dev/null
+    source "$CREDENTIALS_DIRECTORY/creds"
+fi
 
 [[ -z "${PBS_API_TOKEN_NAME}" ]] && echo >&2 "PBS_API_TOKEN_NAME is empty. Aborting" && exit 1
 [[ -z "${PBS_API_TOKEN}" ]] && echo >&2 "PBS_API_TOKEN is empty. Aborting" && exit 1

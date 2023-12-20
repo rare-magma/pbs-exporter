@@ -1,6 +1,6 @@
 # pbs-exporter
 
-Bash script that uploads proxmox backup server API info to prometheus' pushgateway.
+Bash script that uploads proxmox backup server API info to prometheus' pushgateway on a daily basis.
 
 ## Dependencies
 
@@ -17,6 +17,30 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 
 ## Installation
 
+### With Docker
+
+#### docker-compose
+
+1. Configure `pbs_exporter.conf` (see the configuration section below).
+1. Run it.
+
+   ```bash
+   docker compose up --detach
+   ```
+
+#### docker build & run
+
+1. Build the docker image.
+
+   ```bash
+   docker build . --tag pbs-exporter
+   ```
+
+1. Configure `pbs_exporter.conf` (see the configuration section below).
+1. Run it.
+
+   `docker run --rm --init --tty --interactive --volume $(pwd):/app localhost/pbs-exporter`
+
 <details>
 <summary>As normal user</summary>
 
@@ -24,7 +48,7 @@ Bash script that uploads proxmox backup server API info to prometheus' pushgatew
 
 For convenience, you can install this exporter with the following command or follow the manual process described in the next paragraph.
 
-```
+```bash
 make install-user
 $EDITOR $HOME/.config/pbs_exporter.conf
 ```
@@ -37,33 +61,33 @@ $EDITOR $HOME/.config/pbs_exporter.conf
 
 3. Edit pbs-exporter.service and change the following lines:
 
-```
+```bash
 ExecStart=/usr/local/bin/pbs_exporter.sh
 EnvironmentFile=/etc/pbs_exporter.conf
 ```
 
 to
 
-```
+```bash
 ExecStart=/home/%u/.local/bin/pbs_exporter.sh
 EnvironmentFile=/home/%u/.config/pbs_exporter.conf
 ```
 
 4. Copy the systemd unit and timer to `$HOME/.config/systemd/user/`:
 
-```
+```bash
 cp pbs-exporter.* $HOME/.config/systemd/user/
 ```
 
 5. and run the following command to activate the timer:
 
-```
+```bash
 systemctl --user enable --now pbs-exporter.timer
 ```
 
 It's possible to trigger the execution by running manually:
 
-```
+```bash
 systemctl --user start pbs-exporter.service
 ```
 
@@ -75,7 +99,7 @@ systemctl --user start pbs-exporter.service
 
 For convenience, you can install this exporter with the following command or follow the manual process described in the next paragraph.
 
-```
+```bash
 sudo make install
 sudoedit /etc/pbs_exporter.conf
 ```
@@ -88,19 +112,19 @@ sudoedit /etc/pbs_exporter.conf
 
 3. Copy the systemd unit and timer to `/etc/systemd/system/`:
 
-```
+```bash
 sudo cp pbs-exporter.* /etc/systemd/system/
 ```
 
 4. and run the following command to activate the timer:
 
-```
+```bash
 sudo systemctl enable --now pbs-exporter.timer
 ```
 
 It's possible to trigger the execution by running manually:
 
-```
+```bash
 sudo systemctl start pbs-exporter.service
 ```
 
@@ -111,7 +135,7 @@ sudo systemctl start pbs-exporter.service
 
 The config file has a few options:
 
-```
+```bash
 PBS_API_TOKEN_NAME='user@pam!prometheus'
 PBS_API_TOKEN='123e4567-e89b-12d3-a456-426614174000'
 PBS_URL='https://pbs.example.com'
@@ -131,13 +155,13 @@ PUSHGATEWAY_URL='https://pushgateway.example.com'
 
 Run the script manually with bash set to trace:
 
-```
+```bash
 bash -x $HOME/.local/bin/pbs_exporter.sh
 ```
 
 Check the systemd service logs and timer info with:
 
-```
+```bash
 journalctl --user --unit pbs-exporter.service
 systemctl --user list-timers
 ```
@@ -148,13 +172,13 @@ systemctl --user list-timers
 
 Run the script manually with bash set to trace:
 
-```
+```bash
 sudo bash -x /usr/local/bin/pbs_exporter.sh
 ```
 
 Check the systemd service logs and timer info with:
 
-```
+```bash
 journalctl --unit pbs-exporter.service
 systemctl list-timers
 ```
@@ -174,7 +198,7 @@ The following metrics are available for all stores currently not in maintenance 
 
 ## Exported metrics example
 
-```
+```bash
 # HELP pbs_available The available bytes of the underlying storage.
 # TYPE pbs_available gauge
 # HELP pbs_size The size of the underlying storage in bytes.
@@ -203,7 +227,7 @@ pbs_snapshot_vm_count {host="pbs.example.com", store="store2", vm_id="103"} 10
 
 For convenience, you can uninstall this exporter with the following command or follow the process described in the next paragraph.
 
-```
+```bash
 make uninstall-user
 ```
 
@@ -211,13 +235,13 @@ make uninstall-user
 
 Run the following command to deactivate the timer:
 
-```
+```bash
 systemctl --user disable --now pbs-exporter.timer
 ```
 
 Delete the following files:
 
-```
+```bash
 $HOME/.local/bin/pbs_exporter.sh
 $HOME/.config/pbs_exporter.conf
 $HOME/.config/systemd/user/pbs-exporter.timer
@@ -232,7 +256,7 @@ $HOME/.config/systemd/user/pbs-exporter.service
 
 For convenience, you can uninstall this exporter with the following command or follow the process described in the next paragraph.
 
-```
+```bash
 sudo make uninstall
 ```
 
@@ -240,13 +264,13 @@ sudo make uninstall
 
 Run the following command to deactivate the timer:
 
-```
+```bash
 sudo systemctl disable --now pbs-exporter.timer
 ```
 
 Delete the following files:
 
-```
+```bash
 /usr/local/bin/pbs_exporter.sh
 /etc/pbs_exporter.conf
 /etc/systemd/system/pbs-exporter.timer
@@ -257,6 +281,8 @@ Delete the following files:
 <br>
 
 ## Credits
+
+- [reddec/compose-scheduler](https://github.com/reddec/compose-scheduler)
 
 This project takes inspiration from the following:
 
